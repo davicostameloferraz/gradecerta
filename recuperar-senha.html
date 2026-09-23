@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
+<html lang="pt-BR"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GradeCerta — Redefinir senha</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #EEF1F6;
@@ -54,16 +52,10 @@
     width: 56px;
     height: 56px;
     border-radius: 14px;
-    background: var(--teal);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 5px;
-    padding: 9px;
     margin-bottom: 14px;
+    display: block;
+    object-fit: contain;
   }
-  .logo-mark span { border-radius: 4px; background: #16202B; }
-  .logo-mark span:nth-child(4) { background: var(--amber); }
   .wordmark { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; }
   .wordmark .certa { color: var(--teal-deep); }
   .school { font-size: 13px; color: var(--ink-soft); margin-top: 4px; }
@@ -190,18 +182,18 @@
 
 <div class="card">
   <div class="logo-row">
-    <div class="logo-mark"><span></span><span></span><span></span><span></span></div>
+    <img class="logo-mark" src="images/logo.png" alt="GradeCerta">
     <div class="wordmark">Grade<span class="certa">Certa</span></div>
     <div class="school">ETEC Jorge Street - São Caetano do Sul</div>
   </div>
 
-  <a class="back-link" href="login.html">&larr; Voltar para o login</a>
+  <a class="back-link" href="login.html">← Voltar para o login</a>
 
   <div id="formState" class="form-state">
     <h1>Redefinir senha</h1>
     <p class="desc">Digite seu e-mail institucional e enviaremos instruções para redefinir sua senha.</p>
 
-    <form id="recoveryForm" novalidate>
+    <form id="recoveryForm" novalidate="">
       <div class="field" id="emailField">
         <label for="email">E-mail Institucional</label>
         <input type="email" id="email" name="email" placeholder="seunome@etec.sp.gov.br" autocomplete="email">
@@ -214,9 +206,9 @@
   <div id="confirmation" class="confirmation">
     <div class="confirm-icon">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F9E8B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 4h16v16H4z" opacity="0"/>
-        <path d="M22 6l-10 7L2 6"/>
-        <rect x="2" y="4" width="20" height="16" rx="3"/>
+        <path d="M4 4h16v16H4z" opacity="0"></path>
+        <path d="M22 6l-10 7L2 6"></path>
+        <rect x="2" y="4" width="20" height="16" rx="3"></rect>
       </svg>
     </div>
     <div class="confirm-box">
@@ -260,5 +252,6 @@
   });
 </script>
 
-</body>
-</html>
+
+
+</body></html>
