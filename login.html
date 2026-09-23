@@ -1,1 +1,343 @@
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GradeCerta — Entrar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #EEF1F6;
+    --card: #FFFFFF;
+    --border: #E3E6EC;
+    --ink: #1C2430;
+    --ink-soft: #6B7280;
+    --teal: #1F9E8B;
+    --teal-deep: #157567;
+    --amber: #F2A93B;
+    --navy: #1E2A5E;
+    --navy-hover: #16204A;
+    --tab-bg: #F3F4F7;
+    --error-bg: #FDECEA;
+    --error-border: #F3C1BC;
+    --error-ink: #C0392B;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--ink);
+    padding: 32px 16px;
+  }
+  .card {
+    width: 100%;
+    max-width: 440px;
+    background: var(--card);
+    border-radius: 20px;
+    box-shadow: 0 1px 3px rgba(20,30,50,0.06), 0 12px 32px rgba(20,30,50,0.08);
+    padding: 40px 36px 32px;
+  }
+  .logo-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .logo-mark { width: 56px; height: 56px; border-radius: 14px; margin-bottom: 14px; display: block; object-fit: contain; }
+  .wordmark { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; }
+  .wordmark .certa { color: var(--teal-deep); }
+  .school { font-size: 13px; color: var(--ink-soft); margin-top: 4px; }
 
+  .demo-link {
+    display: block;
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    text-decoration: underline;
+    text-decoration-color: var(--border);
+    background: none;
+    border: none;
+    font-family: inherit;
+    cursor: pointer;
+    margin: 0 auto 22px;
+    padding: 0;
+  }
+  .demo-link:hover { color: var(--ink); }
+
+  .section-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+
+  .tabs {
+    display: flex;
+    background: var(--tab-bg);
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 22px;
+    gap: 4px;
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 9px 6px;
+    font-size: 13.5px;
+    font-weight: 600;
+    border-radius: 7px;
+    border: none;
+    background: transparent;
+    color: var(--ink-soft);
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .tab.active { background: var(--ink); color: #fff; }
+
+  label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--ink);
+    outline: none;
+    transition: border-color .15s;
+  }
+  input:focus { border-color: var(--teal); }
+  input::placeholder { color: #A6ADBB; }
+
+  .field { margin-bottom: 18px; }
+  .field.error input { border-color: #E0655A; }
+  .field-error { display: none; font-size: 12.5px; color: var(--error-ink); margin-top: 6px; }
+  .field.error .field-error { display: block; }
+
+  .field-row-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .field-row-header label { margin-bottom: 0; }
+  .field-row-header a { font-size: 12.5px; color: var(--navy); text-decoration: none; font-weight: 600; }
+  .field-row-header a:hover { text-decoration: underline; }
+
+  .login-error {
+    display: none;
+    background: var(--error-bg);
+    border: 1px solid var(--error-border);
+    color: var(--error-ink);
+    font-size: 13px;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 18px;
+  }
+  .login-error.show { display: block; }
+
+  button.submit {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    background: var(--navy);
+    color: #fff;
+    font-size: 14.5px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .15s;
+    margin-top: 4px;
+  }
+  button.submit:hover { background: var(--navy-hover); }
+
+  .footer-link { text-align: center; margin-top: 20px; font-size: 13px; color: var(--ink-soft); }
+
+  /* success state */
+  .success {
+    display: none;
+    text-align: center;
+  }
+  .success.show { display: block; }
+  .form-state.hide { display: none; }
+  .success-icon {
+    width: 52px; height: 52px; margin: 0 auto 18px;
+    border-radius: 50%; background: #ECFAF5; border: 1px solid #B9E8D8;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .success h2 { font-size: 18px; margin: 0 0 8px; }
+  .success p { font-size: 14px; color: var(--ink-soft); margin: 0 0 22px; }
+  .success button.submit { background: var(--tab-bg); color: var(--ink); }
+  .success button.submit:hover { background: #E7E9ED; }
+
+  /* demo credentials modal */
+  .overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(20,25,35,0.45);
+    align-items: center; justify-content: center;
+    padding: 20px;
+    z-index: 10;
+  }
+  .overlay.show { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 16px;
+    max-width: 400px;
+    width: 100%;
+    padding: 24px 24px 20px;
+  }
+  .modal h3 { font-size: 15px; margin: 0 0 4px; }
+  .modal .modal-sub { font-size: 12.5px; color: var(--ink-soft); margin: 0 0 16px; }
+  .cred-row {
+    display: flex; justify-content: space-between; gap: 10px;
+    font-size: 13px; padding: 9px 0; border-top: 1px solid var(--border);
+  }
+  .cred-row:first-of-type { border-top: none; }
+  .cred-row .role { font-weight: 600; color: var(--ink); flex-shrink: 0; }
+  .cred-row .val { color: var(--ink-soft); text-align: right; word-break: break-all; }
+  .modal-close {
+    width: 100%; margin-top: 16px; padding: 10px; border-radius: 9px;
+    border: 1px solid var(--border); background: #fff; font-family: inherit;
+    font-size: 13.5px; font-weight: 600; color: var(--ink); cursor: pointer;
+  }
+  .modal-close:hover { background: var(--tab-bg); }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo-row">
+    <img class="logo-mark" src="images/logo.png" alt="GradeCerta">
+    <div class="wordmark">Grade<span class="certa">Certa</span></div>
+    <div class="school">ETEC Jorge Street - São Caetano do Sul</div>
+  </div>
+
+  <button type="button" class="demo-link" id="showDemoBtn">Ver credenciais de teste</button>
+
+  <div id="formState" class="form-state">
+    <div class="section-label">SELECIONE SEU PERFIL</div>
+    <div class="tabs" id="tabs">
+      <button type="button" class="tab" data-role="professor">Professor</button>
+      <button type="button" class="tab active" data-role="aluno">Aluno</button>
+      <button type="button" class="tab" data-role="coordenacao">Coordenação</button>
+    </div>
+
+    <form id="loginForm" novalidate="">
+      <div class="field">
+        <label for="etecNumber">Número da ETEC</label>
+        <input type="text" id="etecNumber" placeholder="Ex: 035">
+      </div>
+
+      <div class="field" id="emailField">
+        <label for="email">E-mail Institucional</label>
+        <input type="email" id="email" placeholder="joao.silva@etec.sp.gov.br">
+        <div class="field-error">Digite um e-mail institucional válido.</div>
+      </div>
+
+      <div class="field" id="passwordField">
+        <div class="field-row-header">
+          <label for="password">Senha</label>
+          <a href="recuperar-senha.html">Esqueceu a senha?</a>
+        </div>
+        <input type="password" id="password" placeholder="••••••••••••">
+        <div class="field-error">Digite sua senha.</div>
+      </div>
+
+      <div class="login-error" id="loginError">E-mail ou senha incorretos para o perfil selecionado. Use "Ver credenciais de teste" para testar o protótipo.</div>
+
+      <button type="submit" class="submit">Entrar no Sistema</button>
+    </form>
+  </div>
+
+  <div id="success" class="success">
+    <div class="success-icon">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F9E8B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </div>
+    <h2>Login realizado</h2>
+    <p id="successText">Bem-vindo(a)! No sistema final, isso levaria ao seu painel.</p>
+    <button type="button" class="submit" id="backToLogin">Voltar para o login</button>
+  </div>
+
+  <div class="footer-link">Problemas no acesso? Contate o suporte do NSA</div>
+</div>
+
+<div class="overlay" id="demoOverlay">
+  <div class="modal">
+    <h3>Credenciais de demonstração</h3>
+    <p class="modal-sub">Senha para todos os perfis: <strong>123456</strong></p>
+    <div class="cred-row"><span class="role">Aluno</span><span class="val">joao.silva@etec.sp.gov.br</span></div>
+    <div class="cred-row"><span class="role">Professor</span><span class="val">alessandro@etec.sp.gov.br</span></div>
+    <div class="cred-row"><span class="role">Coordenação</span><span class="val">marcia@etec.sp.gov.br</span></div>
+    <button class="modal-close" id="closeDemoBtn">Fechar</button>
+  </div>
+</div>
+
+<script>
+  const DEMO = {
+    professor: { email: 'alessandro@etec.sp.gov.br', label: 'Professor' },
+    aluno: { email: 'joao.silva@etec.sp.gov.br', label: 'Aluno' },
+    coordenacao: { email: 'marcia@etec.sp.gov.br', label: 'Coordenação' },
+  };
+  const DEMO_PASSWORD = '123456';
+
+  const tabs = document.querySelectorAll('.tab');
+  const emailInput = document.getElementById('email');
+  let activeRole = 'aluno';
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      activeRole = tab.dataset.role;
+      emailInput.placeholder = DEMO[activeRole].email;
+      document.getElementById('loginError').classList.remove('show');
+    });
+  });
+
+  const form = document.getElementById('loginForm');
+  const formState = document.getElementById('formState');
+  const success = document.getElementById('success');
+  const loginError = document.getElementById('loginError');
+  const passwordInput = document.getElementById('password');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    loginError.classList.remove('show');
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    const expected = DEMO[activeRole];
+
+    // Simulated auth — no real backend, this is a prototype.
+    if (email === expected.email && password === DEMO_PASSWORD) {
+      formState.classList.add('hide');
+      success.classList.add('show');
+      document.getElementById('successText').textContent =
+        'Bem-vindo(a)! No sistema final, isso levaria ao painel de ' + expected.label + '.';
+    } else {
+      loginError.classList.add('show');
+    }
+  });
+
+  document.getElementById('backToLogin').addEventListener('click', () => {
+    success.classList.remove('show');
+    formState.classList.remove('hide');
+    passwordInput.value = '';
+  });
+
+  const overlay = document.getElementById('demoOverlay');
+  document.getElementById('showDemoBtn').addEventListener('click', () => overlay.classList.add('show'));
+  document.getElementById('closeDemoBtn').addEventListener('click', () => overlay.classList.remove('show'));
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('show'); });
+</script>
+
+
+
+</body></html>
