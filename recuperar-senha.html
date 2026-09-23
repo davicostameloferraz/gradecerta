@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GradeCerta — Redefinir senha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #EEF1F6;
+    --card: #FFFFFF;
+    --border: #E3E6EC;
+    --ink: #1C2430;
+    --ink-soft: #6B7280;
+    --teal: #1F9E8B;
+    --teal-deep: #157567;
+    --amber: #F2A93B;
+    --navy: #1E2A5E;
+    --navy-hover: #16204A;
+    --success-bg: #ECFAF5;
+    --success-border: #B9E8D8;
+    --success-ink: #106A55;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--ink);
+    padding: 32px 16px;
+  }
+  .card {
+    width: 100%;
+    max-width: 440px;
+    background: var(--card);
+    border-radius: 20px;
+    box-shadow: 0 1px 3px rgba(20,30,50,0.06), 0 12px 32px rgba(20,30,50,0.08);
+    padding: 40px 36px 32px;
+  }
+  .logo-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .logo-mark {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: var(--teal);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 5px;
+    padding: 9px;
+    margin-bottom: 14px;
+  }
+  .logo-mark span { border-radius: 4px; background: #16202B; }
+  .logo-mark span:nth-child(4) { background: var(--amber); }
+  .wordmark { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; }
+  .wordmark .certa { color: var(--teal-deep); }
+  .school { font-size: 13px; color: var(--ink-soft); margin-top: 4px; }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 20px;
+  }
+  .back-link:hover { color: var(--ink); }
+
+  h1 {
+    font-size: 19px;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+  .desc {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin: 0 0 24px;
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  input[type="email"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--ink);
+    outline: none;
+    transition: border-color .15s;
+  }
+  input[type="email"]:focus { border-color: var(--teal); }
+  input::placeholder { color: #A6ADBB; }
+
+  .field { margin-bottom: 20px; }
+  .field.error input { border-color: #E0655A; }
+  .field-error {
+    display: none;
+    font-size: 12.5px;
+    color: #C0392B;
+    margin-top: 6px;
+  }
+  .field.error .field-error { display: block; }
+
+  button.submit {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    background: var(--navy);
+    color: #fff;
+    font-size: 14.5px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  button.submit:hover { background: var(--navy-hover); }
+
+  .footer-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .footer-link a { color: var(--navy); text-decoration: none; font-weight: 600; }
+  .footer-link a:hover { text-decoration: underline; }
+
+  /* confirmation state */
+  .confirmation {
+    display: none;
+    text-align: center;
+  }
+  .confirmation.show { display: block; }
+  .form-state.hide { display: none; }
+
+  .confirm-icon {
+    width: 52px; height: 52px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: var(--success-bg);
+    border: 1px solid var(--success-border);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .confirm-box {
+    background: var(--success-bg);
+    border: 1px solid var(--success-border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-size: 13.5px;
+    color: var(--success-ink);
+    line-height: 1.5;
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  .confirm-box strong { display: block; margin-bottom: 2px; }
+
+  .resend {
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--navy);
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo-row">
+    <div class="logo-mark"><span></span><span></span><span></span><span></span></div>
+    <div class="wordmark">Grade<span class="certa">Certa</span></div>
+    <div class="school">ETEC Jorge Street - São Caetano do Sul</div>
+  </div>
+
+  <a class="back-link" href="login.html">&larr; Voltar para o login</a>
+
+  <div id="formState" class="form-state">
+    <h1>Redefinir senha</h1>
+    <p class="desc">Digite seu e-mail institucional e enviaremos instruções para redefinir sua senha.</p>
+
+    <form id="recoveryForm" novalidate>
+      <div class="field" id="emailField">
+        <label for="email">E-mail Institucional</label>
+        <input type="email" id="email" name="email" placeholder="seunome@etec.sp.gov.br" autocomplete="email">
+        <div class="field-error" id="emailError">Digite um e-mail institucional válido (@etec.sp.gov.br).</div>
+      </div>
+      <button type="submit" class="submit">Enviar instruções</button>
+    </form>
+  </div>
+
+  <div id="confirmation" class="confirmation">
+    <div class="confirm-icon">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F9E8B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16v16H4z" opacity="0"/>
+        <path d="M22 6l-10 7L2 6"/>
+        <rect x="2" y="4" width="20" height="16" rx="3"/>
+      </svg>
+    </div>
+    <div class="confirm-box">
+      <strong>Instruções enviadas</strong>
+      Se esse e-mail existir em nossa base, você receberá um link de redefinição em instantes. Verifique também a caixa de spam.
+    </div>
+    <button class="resend" id="resendBtn">Enviar para outro e-mail</button>
+  </div>
+
+  <div class="footer-link">Problemas no acesso? Contate o suporte do NSA</div>
+</div>
+
+<script>
+  const form = document.getElementById('recoveryForm');
+  const formState = document.getElementById('formState');
+  const confirmation = document.getElementById('confirmation');
+  const emailField = document.getElementById('emailField');
+  const emailInput = document.getElementById('email');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const value = emailInput.value.trim();
+    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+    if (!valid) {
+      emailField.classList.add('error');
+      return;
+    }
+    emailField.classList.remove('error');
+
+    // Simulated flow — no real email is sent, this is a prototype.
+    formState.classList.add('hide');
+    confirmation.classList.add('show');
+  });
+
+  document.getElementById('resendBtn').addEventListener('click', function () {
+    confirmation.classList.remove('show');
+    formState.classList.remove('hide');
+    emailInput.value = '';
+    emailInput.focus();
+  });
+</script>
+
+</body>
+</html>
