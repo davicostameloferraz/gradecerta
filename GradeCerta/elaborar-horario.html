@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GradeCerta — Elaborar Horário Escolar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sidebar-bg: #14213D;
+    --sidebar-active: #2D5BE0;
+    --sidebar-text: #9AA6C3;
+    --content-bg: #F5F6FA;
+    --card: #FFFFFF;
+    --border: #E5E7EF;
+    --ink: #1C2430;
+    --ink-soft: #6B7280;
+    --teal: #1F9E8B;
+    --blue: #2D5BE0;
+    --green: #16A34A;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Inter', system-ui, sans-serif; color: var(--ink); background: var(--content-bg); display: flex; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar { width: 224px; flex-shrink: 0; background: var(--sidebar-bg); color: #fff; display: flex; flex-direction: column; padding: 18px 14px; position: sticky; top: 0; height: 100vh; }
+  .sb-brand { display: flex; align-items: center; gap: 10px; padding: 6px 8px 20px; }
+  .sb-brand img { width: 32px; height: 32px; border-radius: 8px; background: ; }
+  .sb-brand .wordmark { font-size: 15px; font-weight: 800; line-height: 1.2; }
+  .sb-brand .wordmark .certa { color: #5EE6C7; }
+  .sb-brand .sub { font-size: 10.5px; color: var(--sidebar-text); font-weight: 500; }
+  .sb-nav { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+  .sb-link { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 9px; color: var(--sidebar-text); text-decoration: none; font-size: 13.5px; font-weight: 600; }
+  .sb-link .left { display: flex; align-items: center; gap: 10px; }
+  .sb-link svg { width: 17px; height: 17px; flex-shrink: 0; }
+  .sb-link:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .sb-link.active { background: var(--sidebar-active); color: #fff; }
+  .sb-user { display: flex; align-items: center; gap: 10px; padding: 12px 8px; border-top: 1px solid rgba(255,255,255,0.08); margin-top: 10px; }
+  .sb-avatar { width: 32px; height: 32px; border-radius: 50%; background: #6B7280; color: #fff; font-size: 12.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .sb-user .name { font-size: 13px; font-weight: 700; color: #fff; line-height: 1.3; }
+  .sb-user .cargo { font-size: 11.5px; color: var(--sidebar-text); }
+  .sb-logout { display: block; margin-top: 8px; padding: 0 8px; font-size: 12.5px; color: var(--sidebar-text); text-decoration: none; background: none; border: none; font-family: inherit; cursor: pointer; text-align: left; }
+  .sb-logout:hover { color: #fff; }
+
+
+  /* Main Content */
+  .main { flex: 1; padding: 28px 36px 48px; min-width: 0; }
+  .main-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 22px; flex-wrap: wrap; gap: 10px; }
+  .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: var(--teal); margin-bottom: 4px; text-transform: uppercase; }
+  h1 { font-size: 25px; font-weight: 800; margin: 0; }
+  .header-meta { font-size: 13px; color: var(--ink-soft); }
+  .header-meta strong { color: var(--ink); }
+
+  /* Cards */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 26px; margin-bottom: 18px; }
+  .step-title { font-size: 12px; font-weight: 700; color: var(--sidebar-text); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px; display: block; }
+  .step-subtitle { font-size: 13px; color: var(--ink-soft); margin-bottom: 24px; display: block; }
+
+  /* Forms & Grid */
+  select, input[type="number"] {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 9px;
+    font-size: 13.5px; font-family: inherit; color: var(--ink); outline: none; background: #fff;
+  }
+  select:focus, input:focus { border-color: var(--blue); }
+  
+  .turma-select-wrapper { max-width: 300px; }
+
+  .grid-header { 
+    display: grid; 
+    grid-template-columns: 1fr 2fr 120px 40px; 
+    gap: 16px; 
+    margin-bottom: 12px; 
+    font-size: 11.5px; 
+    font-weight: 700; 
+    color: var(--sidebar-text); 
+    text-transform: uppercase; 
+  }
+  
+  .grid-row { 
+    display: grid; 
+    grid-template-columns: 1fr 2fr 120px 40px; 
+    gap: 16px; 
+    margin-bottom: 12px; 
+    align-items: center; 
+  }
+
+  .btn-remove {
+    background: transparent; border: none; color: #C0392B; cursor: pointer;
+    width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .btn-remove:hover { background: #FDECEA; }
+
+  .btn-add-row {
+    width: 100%; padding: 12px; border: 1px dashed var(--border); background: transparent; 
+    color: var(--ink-soft); border-radius: 9px; cursor: pointer; margin-bottom: 24px; 
+    font-weight: 600; font-size: 13.5px; transition: all 0.2s; font-family: inherit;
+  }
+  .btn-add-row:hover { background: #f9fafb; border-color: var(--blue); color: var(--blue); }
+
+  /* Action Bar & Footer */
+  .action-bar { 
+    display: flex; justify-content: space-between; align-items: center; 
+    border-top: 1px solid var(--border); padding-top: 24px; 
+  }
+  .total-text { font-size: 14px; color: var(--ink-soft); }
+  .total-text span { font-weight: 700; color: var(--blue); }
+  
+  .action-buttons { display: flex; gap: 12px; align-items: center; }
+  .btn-outline { 
+    padding: 11px 20px; border: 1px solid var(--border); border-radius: 9px; background: transparent;
+    color: var(--ink); font-size: 13.5px; font-weight: 600; font-family: inherit; cursor: pointer;
+  }
+  .btn-outline:hover { background: var(--content-bg); }
+  
+  .btn-primary { 
+    padding: 11px 24px; border: none; border-radius: 9px; background: var(--green);
+    color: #fff; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: #128a3e; }
+
+  .info-box { 
+    background: #F0F5FF; color: #1E40AF; padding: 14px 18px; border-radius: 9px; 
+    font-size: 13px; margin-top: 20px; display: flex; gap: 10px; align-items: center; 
+  }
+
+  /* Status Message */
+  .success-overlay {
+    display: none; position: fixed; top: 24px; right: 24px; background: var(--green); color: white;
+    padding: 16px 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-weight: 600; font-size: 14px; align-items: center; gap: 10px; z-index: 1000;
+  }
+  .success-overlay.show { display: flex; animation: slideIn 0.3s ease forwards; }
+  
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sb-brand">
+    <img src="images/logo.png" alt="GradeCerta">
+    <div>
+      <div class="wordmark">Grade<span class="certa">Certa</span></div>
+      <div class="sub">ETEC Jorge Street</div>
+    </div>
+  </div>
+
+  <nav class="sb-nav">
+    <a class="sb-link" href="painel-de-controle.html"><span class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Painel de Controle</span></a>
+    <a class="sb-link active" href="elaborar-horario.html"><span class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Elaborar Horário</span></a>
+    <a class="sb-link" href="horarios-por-sala.html"><span class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 3v3M16 3v3"/></svg>Horários por Sala</span></a>
+    
+    <a class="sb-link" href="alertas.html"><span class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>Alertas</span></a>
+    <a class="sb-link" href="reposicao-aulas.html"><span class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Reposição de Aulas</span></a>
+    <a class="sb-link" href="professores-turma.html"><span class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Professores e Turmas</span></a>
+  </nav>
+
+  <div class="sb-user">
+    <div class="sb-avatar">M</div>
+    <div>
+      <div class="name">Coord. Márcia</div>
+      <div class="cargo">Coordenação</div>
+    </div>
+  </div>
+  <button class="sb-logout" id="logoutBtn">&larr; Sair</button>
+</aside>
+
+<main class="main">
+  <div class="main-header">
+    <div>
+      <div class="eyebrow">COORDENAÇÃO</div>
+      <h1>Elaborar Horário Escolar</h1>
+    </div>
+    <div class="header-meta">Ano Letivo: <strong>2026</strong> &nbsp;|&nbsp; Etec Jorge Street</div>
+  </div>
+
+  <div class="card">
+    <span class="step-title">PASSO 1: SELECIONE A TURMA ALVO</span>
+    <div class="turma-select-wrapper">
+      <select id="turmaGeralSelect">
+        <option value="MTEC-2GT" selected>MTEC-2GT</option>
+        <option value="MTEC-1GT">MTEC-1GT</option>
+        <option value="MTEC-3GT">MTEC-3GT</option>
+        <option value="MTEC-1HT">MTEC-1HT</option>
+        <option value="MTEC-2HT">MTEC-2HT</option>
+        <option value="MTEC-3HT">MTEC-3HT</option>
+        <option value="MTEC-1CT">MTEC-1CT</option>
+        <option value="MTEC-2CT">MTEC-2CT</option>
+        <option value="MTEC-3CT">MTEC-3CT</option>
+        <option value="MTEC-1AT">MTEC-1AT</option>
+        <option value="MTEC-2AT">MTEC-2AT</option>
+        <option value="MTEC-3AT">MTEC-3AT</option>
+        <option value="MTEC-1AM">MTEC-1AM</option>
+        <option value="MTEC-2AM">MTEC-2AM</option>
+        <option value="MTEC-3AM">MTEC-3AM</option>
+        <option value="MTEC-1BM">MTEC-1BM</option>
+        <option value="MTEC-2BM">MTEC-2BM</option>
+        <option value="MTEC-3BM">MTEC-3BM</option>
+        <option value="MTEC-1DM">MTEC-1DM</option>
+        <option value="MTEC-2DM">MTEC-2DM</option>
+        <option value="MTEC-3DM">MTEC-3DM</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="step-title">PASSO 2: MATÉRIAS E CARGA HORÁRIA SEMANAL</span>
+    <span class="step-subtitle">Configure as distribuições de aulas e os professores para esta grade</span>
+
+    <div class="grid-header">
+      <div>MATÉRIA</div>
+      <div>PROFESSOR RESPONSÁVEL</div>
+      <div>AULAS / SEMANA</div>
+      <div></div>
+    </div>
+
+    <div id="materiasContainer">
+      <!-- Linhas de matérias serão injetadas aqui -->
+    </div>
+
+    <button type="button" class="btn-add-row" id="btnAddRow">+ Adicionar Nova Matéria</button>
+
+    <div class="action-bar">
+      <div class="total-text">Total: <span id="totalAulasText">0 aulas/semana</span> de 20 possíveis</div>
+      <div class="action-buttons">
+        <button type="button" class="btn-outline" id="btnLimpar">Limpar Tudo</button>
+        <button type="button" class="btn-primary" id="btnGerar">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Gerar Horário
+        </button>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      O sistema distribuirá as aulas respeitando a disponibilidade dos professores e a carga horária estabelecida.
+    </div>
+  </div>
+</main>
+
+<div class="success-overlay" id="successToast">
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+  Horário gerado com sucesso!
+</div>
+
+<script src="js/data.js"></script>
+<script>
+  // Puxa matérias do data.js ou usa o mock como segurança
+  const MOCK_MATERIAS = Object.keys(typeof GC_MATERIA_CATEGORIA !== 'undefined' ? GC_MATERIA_CATEGORIA : {}).length > 0 
+    ? Object.keys(GC_MATERIA_CATEGORIA) 
+    : ['APS', 'BD1', 'PWEB II', 'SIS.EMB1', 'PAM1', 'DS', 'LPL', 'ING', 'BIOL', 'EDF', 'GEO', 'HIST', 'MAT', 'QUIM', 'FIS'];
+
+  // Puxa professores do data.js combinando com os customizados do localStorage e removendo os excluídos
+  function getListaProfessoresDinamica() {
+    let base = typeof gcGetListaProfessores === 'function' ? gcGetListaProfessores() : ['Alessandro', 'Andrea', 'Canedo', 'Damelio', 'David', 'Karen', 'Luzia', 'Maicon', 'Marcia', 'Marly', 'Nelson', 'Paulo L.', 'Roberta', 'Rosana', 'Simone'];
+    const custom = JSON.parse(localStorage.getItem('gc_professores_custom') || '[]').map(p => p.nome);
+    const hidden = JSON.parse(localStorage.getItem('gc_professores_hidden') || '[]');
+    let unicos = [...new Set([...base, ...custom])];
+    return unicos.filter(p => !hidden.includes(p)).sort();
+  }
+  const MOCK_PROFESSORES = getListaProfessoresDinamica();
+  const container = document.getElementById('materiasContainer');
+  const totalText = document.getElementById('totalAulasText');
+  const MAX_AULAS = 20;
+
+  // Grade inicial baseada na imagem de referência
+  const initialData = [
+    { materia: 'APS', professor: 'Alessandro', aulas: 4 },
+    { materia: 'BD1', professor: 'Maicon', aulas: 2 },
+    { materia: 'PWEB II', professor: 'Nelson', aulas: 2 },
+    { materia: 'SIS.EMB1', professor: 'Roberta', aulas: 2 },
+    { materia: 'PAM1', professor: 'Nelson', aulas: 2 },
+    { materia: 'DS', professor: 'Marcia', aulas: 3 }
+  ];
+
+  function calcularTotal() {
+    const inputs = container.querySelectorAll('.input-aulas');
+    let total = 0;
+    inputs.forEach(input => {
+      total += parseInt(input.value) || 0;
+    });
+    
+    totalText.innerText = `${total} aulas/semana`;
+    
+    if (total > MAX_AULAS) {
+      totalText.style.color = '#C0392B';
+    } else {
+      totalText.style.color = 'var(--blue)';
+    }
+  }
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    gcClearSession();
+    window.location.href = 'login.html';
+  });
+
+  function renderOptions(lista, valorSelecionado, defaultText) {
+    let options = `<option value="">${defaultText}</option>`;
+    lista.sort().forEach(item => {
+      const selected = item === valorSelecionado ? 'selected' : '';
+      options += `<option value="${item}" ${selected}>${item}</option>`;
+    });
+    return options;
+  }
+
+  function criarLinha(materia = '', professor = '', aulas = 2) {
+    const row = document.createElement('div');
+    row.className = 'grid-row';
+    
+    row.innerHTML = `
+      <select class="select-materia">
+        ${renderOptions(MOCK_MATERIAS, materia, 'Selecione a matéria')}
+      </select>
+      <select class="select-professor">
+        ${renderOptions(MOCK_PROFESSORES, professor, 'Selecione o professor')}
+      </select>
+      <input type="number" class="input-aulas" min="1" max="10" value="${aulas}">
+      <button type="button" class="btn-remove" title="Remover matéria">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/></svg>
+      </button>
+    `;
+
+    // Eventos
+    row.querySelector('.btn-remove').addEventListener('click', () => {
+      row.remove();
+      calcularTotal();
+    });
+    
+    row.querySelector('.input-aulas').addEventListener('input', calcularTotal);
+
+    container.appendChild(row);
+    calcularTotal();
+  }
+
+  function inicializarGrade() {
+    container.innerHTML = '';
+    initialData.forEach(d => criarLinha(d.materia, d.professor, d.aulas));
+  }
+
+  // Event Listeners dos botões de ação
+  document.getElementById('btnAddRow').addEventListener('click', () => {
+    criarLinha();
+  });
+
+  document.getElementById('btnLimpar').addEventListener('click', () => {
+    if(confirm('Tem certeza que deseja limpar todas as matérias configuradas?')) {
+      container.innerHTML = '';
+      calcularTotal();
+    }
+  });
+
+  document.getElementById('btnGerar').addEventListener('click', () => {
+    const toast = document.getElementById('successToast');
+    toast.classList.add('show');
+    
+    // Remove o toast depois de 4 segundos
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 4000);
+  });
+
+  // Inicializa a tela com os dados padrão
+  inicializarGrade();
+</script>
+
+</body>
+</html>
